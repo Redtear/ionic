@@ -6,7 +6,9 @@ import {ionicBootstrap} from '../../../../../src';
   templateUrl: 'main.html'
 })
 class E2EPage {
-
+  testClick(ev: UIEvent) {
+    console.log(ev);
+  }
 }
 
 

@@ -202,7 +202,7 @@ ion-item-group {
 // --------------------------------------------------
 
 ion-item-divider {
-  padding: $item-md-padding-top $item-md-padding-right $item-md-padding-bottom $item-md-padding-left;
+  padding-left: $item-md-padding-left;
 
   color: $item-md-divider-color;
   background-color: $item-md-divider-background;

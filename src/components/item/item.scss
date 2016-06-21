@@ -67,10 +67,18 @@ ion-item-group {
 
 ion-item-divider {
   z-index: 1000;
-  display: block;
+  min-height: 30px;
+
+  display: flex;
+  overflow: hidden;
+
+  align-items: center;
+  justify-content: space-between;
+
+  margin: 0;
+  padding: 0;
 
   width: 100%;
-  min-height: 30px;
 
   &[sticky] {
     position: sticky;

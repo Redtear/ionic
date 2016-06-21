@@ -191,7 +191,7 @@ ion-note {
 // --------------------------------------------------
 
 ion-item-divider {
-  padding: $item-wp-padding-top $item-wp-padding-right $item-wp-padding-bottom $item-wp-padding-left;
+  padding-left: $item-wp-padding-left;
 
   color: $item-wp-divider-color;
   background-color: $item-wp-divider-background;
