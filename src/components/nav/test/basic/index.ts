@@ -13,15 +13,18 @@ class MyCmpTest{}
 
 @Component({
   template: `
-    <ion-navbar *navbar>
-      <ion-title>{{title}}</ion-title>
-      <ion-buttons start>
-        <button><ion-icon name="star"></ion-icon></button>
-      </ion-buttons>
-      <ion-buttons end>
-        <button>S1g</button>
-      </ion-buttons>
-    </ion-navbar>
+    <ion-header>
+      <ion-navbar>
+        <ion-title>{{title}}</ion-title>
+        <ion-buttons start>
+          <button><ion-icon name="star"></ion-icon></button>
+        </ion-buttons>
+        <ion-buttons end>
+          <button>S1g</button>
+        </ion-buttons>
+      </ion-navbar>
+    </ion-header>
+
     <ion-content>
       <ion-list>
         <ion-list-header>
@@ -57,7 +60,7 @@ class MyCmpTest{}
   directives: [MyCmpTest]
 })
 class FirstPage {
-  pushPage;
+  pushPage = FullPage;
   title = 'First Page';
   pages: Array<number> = [];
   @ViewChild(Content) content: Content;
@@ -66,8 +69,6 @@ class FirstPage {
     private nav: NavController,
     private view: ViewController
   ) {
-    this.pushPage = FullPage;
-
     for (var i = 1; i <= 50; i++) {
       this.pages.push(i);
     }
@@ -201,13 +202,19 @@ class FullPage {
 
 @Component({
   template: `
-    <ion-navbar *navbar primary>
-      <ion-title>Primary Color Page Header</ion-title>
-      <ion-buttons end>
-        <button>S1g</button>
-      </ion-buttons>
-    </ion-navbar>
-    <ion-content padding>
+    <ion-header>
+      <ion-navbar primary>
+        <ion-title>Primary Color Page Header</ion-title>
+        <ion-buttons end>
+          <button>S1g</button>
+        </ion-buttons>
+      </ion-navbar>
+      <ion-toolbar no-border-top>
+        <ion-title>I'm a sub header!</ion-title>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content padding fullscreen>
       <p><button class="e2eFrom3To2" (click)="nav.pop()">Pop</button></p>
       <p><button (click)="pushAnother()">Push to AnotherPage</button></p>
       <p><button (click)="pushFullPage()">Push to FullPage</button></p>
@@ -221,9 +228,15 @@ class FullPage {
       </ion-fixed>
       <ion-fixed style="pointer-events: none; top:0; bottom:0; right:0; width:50%; background: rgba(0,0,0,0.5);"></ion-fixed>
     </ion-content>
-    <ion-toolbar position="bottom">
-      Footer
-    </ion-toolbar>
+
+    <ion-footer>
+      <ion-toolbar no-border-bottom>
+        I'm a sub footer!
+      </ion-toolbar>
+      <ion-toolbar no-border-top>
+        <ion-title>Footer</ion-title>
+      </ion-toolbar>
+    </ion-footer>
   `
 })
 class PrimaryHeaderPage {
@@ -267,10 +280,18 @@ class PrimaryHeaderPage {
 
 @Component({
   template: `
-    <ion-navbar *navbar hideBackButton>
-      <ion-title>Another Page Header</ion-title>
-    </ion-navbar>
+    <ion-header>
+      <ion-navbar hideBackButton>
+        <ion-title>Another Page Header</ion-title>
+      </ion-navbar>
+    </ion-header>
+
     <ion-content>
+
+      <ion-toolbar no-border-top>
+        I'm a sub header in the content!
+      </ion-toolbar>
+
       <ion-list>
 
         <ion-item>
@@ -286,12 +307,24 @@ class PrimaryHeaderPage {
         <button ion-item (click)="setRoot()">setRoot(FirstPage)</button>
         <button ion-item (click)="toggleBackButton()">Toggle hideBackButton</button>
         <button ion-item (click)="setBackButtonText()">Set Back Button Text</button>
+        <f></f><f></f><f></f><f></f><f></f><f></f><f></f><f></f><f></f><f></f><f></f><f></f><f></f><f></f><f></f><f></f>
       </ion-list>
+
+      <ion-toolbar no-border-bottom>
+        I'm a sub footer in the content!
+      </ion-toolbar>
+
+      <ion-toolbar no-border-bottom no-border-top>
+        And I'm a sub footer in the content too!
+      </ion-toolbar>
+
     </ion-content>
 
-    <ion-toolbar position="bottom">
-      Another Page Footer
-    </ion-toolbar>
+    <ion-footer>
+      <ion-toolbar>
+        Another Page Footer
+      </ion-toolbar>
+    </ion-footer>
   `
 })
 class AnotherPage {

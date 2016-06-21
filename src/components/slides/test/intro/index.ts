@@ -44,14 +44,15 @@ class IntroPage {
 
 @Component({
   template: `
-  <ion-navbar *navbar>
-    <ion-title>Slides</ion-title>
-  </ion-navbar>
+  <ion-header>
+    <ion-navbar>
+      <ion-title>Slides</ion-title>
+    </ion-navbar>
+  </ion-header>
 
   <ion-content padding>
     <h1>Another Page</h1>
   </ion-content>
-
   `
 })
 class MainPage {}

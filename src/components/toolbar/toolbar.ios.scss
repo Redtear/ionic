@@ -30,14 +30,11 @@ $toolbar-ios-button-border-radius:          4px !default;
 
 $navbar-ios-height:                         $toolbar-ios-height !default;
 
+
 .toolbar {
   padding: $toolbar-ios-padding;
 
   min-height: $toolbar-ios-height;
-}
-
-ion-navbar-section {
-  min-height: $navbar-ios-height;
 }
 
 
@@ -45,6 +42,7 @@ ion-navbar-section {
 // --------------------------------------------------
 
 .toolbar-background {
+  border-top-width: 1px;
   border-bottom-width: 1px;
   border-style: solid;
   border-color: $toolbar-ios-border-color;
@@ -52,16 +50,23 @@ ion-navbar-section {
 }
 
 &.hairlines .toolbar-background {
+  border-top-width: $hairlines-width;
   border-bottom-width: $hairlines-width;
 }
 
-.toolbar[position=bottom] .toolbar-background {
-  border-top-width: 1px;
-  border-bottom-width: 0;
+
+// iOS Toolbar Borders
+// --------------------------------------------------
+
+ion-header .toolbar:first-child .toolbar-background,
+ion-menu > .toolbar:first-child .toolbar-background,
+.toolbar[no-border-top] .toolbar-background {
+  border-top-width: 0;
 }
 
-&.hairlines .toolbar[position=bottom] .toolbar-background {
-  border-top-width: $hairlines-width;
+ion-footer .toolbar:last-child .toolbar-background,
+.toolbar[no-border-bottom] .toolbar-background {
+  border-bottom-width: 0;
 }
 
 

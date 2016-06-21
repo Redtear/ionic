@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, Component, ContentChild, ContentChildren, Directive, ElementRef, forwardRef, Renderer, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ContentChild, ContentChildren, Directive, ElementRef, forwardRef, Input, Renderer, ViewChild, ViewEncapsulation } from '@angular/core';
 
 import { Button } from '../button/button';
 import { Form } from '../../util/form';
 import { Icon } from '../icon/icon';
+import { ItemReorder } from '../item/item-reorder';
 import { Label } from '../label/label';
 
 
@@ -235,8 +236,10 @@ import { Label } from '../label/label';
         '<ng-content select="ion-select,ion-input,ion-textarea,ion-datetime,ion-range,[item-content]"></ng-content>' +
       '</div>' +
       '<ng-content select="[item-right],ion-radio,ion-toggle"></ng-content>' +
+      '<ion-reorder></ion-reorder>' +
     '</div>' +
     '<ion-button-effect></ion-button-effect>',
+  directives: [forwardRef(() => ItemReorder)],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
 })
@@ -245,6 +248,11 @@ export class Item {
   private _inputs: Array<string> = [];
   private _label: Label;
   private _viewLabel: boolean = true;
+
+  /**
+   * @private
+   */
+  @Input() index: number;
 
   /**
    * @private
@@ -258,6 +266,7 @@ export class Item {
 
   constructor(form: Form, private _renderer: Renderer, private _elementRef: ElementRef) {
     this.id = form.nextId().toString();
+    _elementRef.nativeElement['$ionComponent'] = this;
   }
 
   /**
@@ -350,6 +359,13 @@ export class Item {
     icons.toArray().forEach((icon: any) => {
       icon.addClass('item-icon');
     });
+  }
+
+  /**
+   * @private
+   */
+  height(): number {
+    return this._elementRef.nativeElement.offsetHeight;
   }
 }
 

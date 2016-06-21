@@ -1,8 +1,14 @@
-<ion-navbar *navbar>
-  <ion-title>Modals</ion-title>
-</ion-navbar>
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Modals</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
 
 <ion-content padding>
+
   <p>
     <button (click)="presentModal()">Present modal, pass params</button>
   </p>
@@ -24,4 +30,5 @@
   <p>
     {{platforms | json}}
   </p>
+
 </ion-content>

@@ -11,6 +11,36 @@ import {ViewController} from '../nav/view-controller';
 /**
  * @private
  */
+@Directive({
+  selector: 'ion-header'
+})
+export class Header {
+
+  constructor(@Optional() viewCtrl: ViewController) {
+    viewCtrl && viewCtrl.setHeader(this);
+  }
+
+}
+
+
+/**
+ * @private
+ */
+@Directive({
+  selector: 'ion-footer'
+})
+export class Footer {
+
+  constructor(@Optional() viewCtrl: ViewController) {
+    viewCtrl && viewCtrl.setFooter(this);
+  }
+
+}
+
+
+/**
+ * @private
+ */
 export class ToolbarBase extends Ion {
   itemRefs: ElementRef[] = [];
   titleRef: any = null;
@@ -66,8 +96,9 @@ export class ToolbarBase extends Ion {
  * @description
  * A Toolbar is a generic bar that is positioned above or below content.
  * Unlike a [Navbar](../../nav/Navbar), a toolbar can be used as a subheader.
- * Toolbars are positioned automatically at the `top`, but they can be
- * positioned at the bottom by setting `position="bottom"` on the component.
+ * When toolbars are placed within an `<ion-header>` or `<ion-footer>`,
+ * the toolbars stay fixed in their respective location. When placed within
+ * `<ion-content>`, toolbars will scroll with the content.
  *
  *
  * ### Buttons in a Toolbar
@@ -85,53 +116,78 @@ export class ToolbarBase extends Ion {
  * | `left`      | Positions element to the left of all other elements.                                                            |
  * | `right`     | Positions element to the right of all other elements.                                                           |
  *
- * See [usage](#usage) below for some examples.
+ *
+ * ### Multiple Toolbars
+ * Toolbars can be stacked up vertically in `<ion-header>`, `<ion-content>`, and
+ * `<ion-footer>` elements. However, toolbars also come with borders on both
+ * the top and bottom of the toolbar. To give developers full control of the
+ * design, Ionic also includes the `no-border-bottom` and `no-border-top` attributes.
+ * For example, sometimes two vertically stacked toolbars may have different
+ * background colors, in this case it might be best to leave a border between them.
+ * However, if they have the same background color, the app may look best without
+ * a border between them. The main point here is, it's entirely up to the app's design
+ * to decide when and when not to show borders between toolbars, and to do so then
+ * each toolbar can individually set `no-border-bottom` and `no-border-top` attributes.
  *
  *
  * @usage
  * ```html
- * <ion-toolbar>
- *   <ion-buttons start>
- *     <button>
- *       <ion-icon name="contact"></ion-icon>
- *     </button>
- *     <button>
- *       <ion-icon name="search"></ion-icon>
- *     </button>
- *   </ion-buttons>
- *   <ion-title>My Toolbar Title</ion-title>
- * </ion-toolbar>
+ * <ion-header>
  *
- * <ion-toolbar>
- *   <ion-title>I'm a subheader</ion-title>
- * </ion-toolbar>
+ *   <ion-toolbar no-border-bottom>
+ *     <ion-buttons start>
+ *       <button>
+ *         <ion-icon name="contact"></ion-icon>
+ *       </button>
+ *       <button>
+ *         <ion-icon name="search"></ion-icon>
+ *       </button>
+ *     </ion-buttons>
+ *     <ion-title>My Toolbar Title</ion-title>
+ *   </ion-toolbar>
  *
- * <ion-content></ion-content>
+ *   <ion-toolbar no-border-top>
+ *     <ion-title>I'm a subheader</ion-title>
+ *   </ion-toolbar>
  *
- * <ion-toolbar position="bottom">
- *   <ion-title>I'm a subfooter</ion-title>
- *   <ion-buttons right>
- *     <button>
- *       <ion-icon name="menu"></ion-icon>
- *     </button>
- *   </ion-buttons>
- * </ion-toolbar>
+ * <ion-header>
  *
- * <ion-toolbar position="bottom">
- *   <ion-title>I'm a footer</ion-title>
- *   <ion-buttons end>
- *     <button>
- *       <ion-icon name="more"></ion-icon>
- *     </button>
- *     <button>
- *       <ion-icon name="options"></ion-icon>
- *     </button>
- *   </ion-buttons>
- * </ion-toolbar>
+ *
+ * <ion-content>
+ *
+ *   <ion-toolbar>
+ *     <ion-title>Scrolls with the content</ion-title>
+ *   </ion-toolbar>
+ *
+ * </ion-content>
+ *
+ *
+ * <ion-footer>
+ *
+ *   <ion-toolbar no-border-bottom>
+ *     <ion-title>I'm a subfooter</ion-title>
+ *     <ion-buttons right>
+ *       <button>
+ *         <ion-icon name="menu"></ion-icon>
+ *       </button>
+ *     </ion-buttons>
+ *   </ion-toolbar>
+ *
+ *   <ion-toolbar no-border-top>
+ *     <ion-title>I'm a footer</ion-title>
+ *     <ion-buttons end>
+ *       <button>
+ *         <ion-icon name="more"></ion-icon>
+ *       </button>
+ *       <button>
+ *         <ion-icon name="options"></ion-icon>
+ *       </button>
+ *     </ion-buttons>
+ *   </ion-toolbar>
+ *
+ * </ion-footer>
  *  ```
  *
- * @property {any} [position] - set position of the toolbar, `top` or `bottom`.
- * Default `top`.
  * @demo /docs/v2/demos/toolbar/
  * @see {@link ../../navbar/Navbar/ Navbar API Docs}
  */
@@ -156,94 +212,21 @@ export class Toolbar extends ToolbarBase {
 
   constructor(
     @Optional() viewCtrl: ViewController,
-    elementRef: ElementRef,
-    config: Config
+    @Optional() header: Header,
+    @Optional() footer: Footer,
+    config: Config,
+    elementRef: ElementRef
   ) {
     super(elementRef);
-    this._sbPadding = config.getBoolean('statusbarPadding', false);
-    viewCtrl && viewCtrl.setToolbarRef(elementRef);
-  }
 
-}
-
-/**
- * @name Title
- * @description
- * `ion-title` is a component that sets the title of the `Toolbar` or `Navbar`
- *
- * @usage
- *
- * ```html
- * <ion-navbar *navbar>
- *    <ion-title>Tab 1</ion-title>
- * </ion-navbar>
- * ```
- *
- * Or to create a navbar with a toolbar as a subheader:
- *
- * ```html
- * <ion-navbar *navbar>
- *    <ion-title>Tab 1</ion-title>
- * </ion-navbar>
- *
- * <ion-toolbar>
- *   <ion-title>Subheader</ion-title>
- * </ion-toolbar>
- * ```
- *
- * @demo /docs/v2/demos/title/
- */
-@Component({
-  selector: 'ion-title',
-  template:
-    '<div class="toolbar-title">' +
-      '<ng-content></ng-content>' +
-    '</div>',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
-})
-export class ToolbarTitle extends Ion {
-  constructor(
-    elementRef: ElementRef,
-    @Optional() toolbar: Toolbar,
-    @Optional() @Inject(forwardRef(() => Navbar)) navbar: Navbar
-  ) {
-    super(elementRef);
-    toolbar && toolbar.setTitleCmp(this);
-    navbar && navbar.setTitleCmp(this);
-  }
-  /**
-   * @private
-   */
-  getTitleText() {
-    return this.getNativeElement().textContent;
-  }
-}
-
-
-/**
- * @private
- */
-@Directive({
-  selector: 'ion-buttons,[menuToggle],ion-nav-items'
-})
-export class ToolbarItem {
-  inToolbar: boolean;
-
-  constructor(
-    elementRef: ElementRef,
-    @Optional() toolbar: Toolbar,
-    @Optional() @Inject(forwardRef(() => Navbar)) navbar: Navbar
-  ) {
-    toolbar && toolbar.addItemRef(elementRef);
-    navbar && navbar.addItemRef(elementRef);
-    this.inToolbar = !!(toolbar || navbar);
-  }
-
-  @ContentChildren(Button)
-  set _buttons(buttons: any) {
-    if (this.inToolbar) {
-      Button.setRoles(buttons, 'bar-button');
+    if (viewCtrl && (header || footer)) {
+      // only toolbars within headers and footer are view toolbars
+      // toolbars within the content are not view toolbars, since they
+      // are apart of the content, and could be anywhere within the content
+      viewCtrl.setToolbarRef(elementRef);
     }
+
+    this._sbPadding = config.getBoolean('statusbarPadding');
   }
+
 }

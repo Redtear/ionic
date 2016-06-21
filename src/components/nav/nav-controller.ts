@@ -1,4 +1,4 @@
-import {ViewContainerRef, ComponentResolver, ComponentRef, provide, ReflectiveInjector, ResolvedReflectiveProvider, ElementRef, NgZone, Renderer, EventEmitter} from '@angular/core';
+import {ViewContainerRef, ComponentResolver, ComponentFactory, ComponentRef, provide, ReflectiveInjector, ResolvedReflectiveProvider, ElementRef, NgZone, Renderer, EventEmitter} from '@angular/core';
 
 import {addSelector} from '../../config/bootstrap';
 import {App} from '../app/app';
@@ -1059,7 +1059,7 @@ export class NavController extends Ion {
       // DOM WRITE
       this.setTransitioning(true, 500);
 
-      this.loadPage(enteringView, null, opts, () => {
+      this.loadPage(enteringView, this._viewport, opts, () => {
         enteringView.fireLoaded();
         this.viewDidLoad.emit(enteringView);
         this._postRender(transId, enteringView, leavingView, isAlreadyTransitioning, opts, done);
@@ -1201,10 +1201,6 @@ export class NavController extends Ion {
         this.setTransitioning(!enableApp, duration);
       }
 
-      if (enteringView.viewType) {
-        transAnimation.before.addClass(enteringView.viewType);
-      }
-
       // create a callback for when the animation is done
       transAnimation.onFinish((trans: Transition) => {
         // transition animation has ended
@@ -1328,9 +1324,6 @@ export class NavController extends Ion {
         // class to the nav when it's finished its first transition
         if (!this._init) {
           this._init = true;
-          if (!this.isPortal) {
-            this._renderer.setElementClass(this.getNativeElement(), 'has-views', true);
-          }
         }
 
       } else {
@@ -1467,13 +1460,13 @@ export class NavController extends Ion {
   /**
    * @private
    */
-  loadPage(view: ViewController, navbarContainerRef: ViewContainerRef, opts: NavOptions, done: Function) {
-    if (!this._viewport || !view.componentType) {
+  loadPage(view: ViewController, viewport: ViewContainerRef, opts: NavOptions, done: Function) {
+    if (!viewport || !view.componentType) {
       return;
     }
 
-    // automatically set "ion-page" selector
-    // TODO: see about having this set using ComponentFactory
+    // TEMPORARY: automatically set selector w/ dah reflector
+    // TODO: use componentFactory.create once fixed
     addSelector(view.componentType, 'ion-page');
 
     this._compiler.resolveComponent(view.componentType).then(componentFactory => {
@@ -1489,7 +1482,7 @@ export class NavController extends Ion {
 
       let componentRef = componentFactory.create(childInjector, null, null);
 
-      this._viewport.insert(componentRef.hostView, this._viewport.length);
+      viewport.insert(componentRef.hostView, viewport.length);
 
       // a new ComponentRef has been created
       // set the ComponentRef's instance to its ViewController
@@ -1517,30 +1510,6 @@ export class NavController extends Ion {
           this._renderer.setElementAttribute(pageElementRef.nativeElement, 'style', null);
           componentRef.destroy();
         });
-
-        if (!navbarContainerRef) {
-          // there was not a navbar container ref already provided
-          // so use the location of the actual navbar template
-          navbarContainerRef = view.getNavbarViewRef();
-        }
-
-        // find a navbar template if one is in the page
-        let navbarTemplateRef = view.getNavbarTemplateRef();
-
-        // check if we have both a navbar ViewContainerRef and a template
-        if (navbarContainerRef && navbarTemplateRef) {
-          // let's now create the navbar view
-          let navbarViewRef = navbarContainerRef.createEmbeddedView(navbarTemplateRef);
-
-          view.onDestroy(() => {
-            // manually destroy the navbar when the page is destroyed
-            navbarViewRef.destroy();
-          });
-        }
-
-        // options may have had a postLoad method
-        // used mainly by tabs
-        opts.postLoad && opts.postLoad(view);
 
         // our job is done here
         done(view);
@@ -1784,6 +1753,13 @@ export class NavController extends Ion {
   }
 
   /**
+   * @private
+   */
+  isSwipeBackEnabled(): boolean {
+    return this._sbEnabled;
+  }
+
+  /**
    * Returns the root `NavController`.
    * @returns {NavController}
    */
@@ -1852,7 +1828,6 @@ export interface NavOptions {
   keyboardClose?: boolean;
   preload?: boolean;
   transitionDelay?: number;
-  postLoad?: Function;
   progressAnimation?: boolean;
   climbNav?: boolean;
   ev?: any;

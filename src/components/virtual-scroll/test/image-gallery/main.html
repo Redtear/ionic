@@ -1,3 +1,44 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Virtual Scroll: Image Gallery</ion-title>
+    <ion-buttons end>
+      <button (click)="reload()">
+        Reload
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content>
+
+  <ion-list [virtualScroll]="items"
+            [headerFn]="headerFn"
+            [footerFn]="footerFn"
+            approxItemWidth="80px"
+            approxItemHeight="80px"
+            approxFooterWidth="80px"
+            approxFooterHeight="80px"
+            approxHeaderWidth="100%"
+            approxHeaderHeight="36px">
+
+    <div *virtualHeader="let header" class="virtual-header">
+      Header: {{header.date}}
+    </div>
+
+    <div *virtualItem="let item" class="virtual-item">
+      <ion-img [src]="item.imgSrc"></ion-img>
+      <!--{{ item.index }}-->
+    </div>
+
+    <div *virtualFooter="let footer" class="virtual-footer">
+      footer
+    </div>
+
+  </ion-list>
+
+</ion-content>
+
 <style>
   .virtual-header {
     width: 100%;
@@ -30,42 +71,3 @@
     background: red;
   }
 </style>
-
-<ion-navbar *navbar>
-  <ion-title>Virtual Scroll: Image Gallery</ion-title>
-  <ion-buttons end>
-    <button (click)="reload()">
-      Reload
-    </button>
-  </ion-buttons>
-</ion-navbar>
-
-<ion-content>
-
-  <ion-list [virtualScroll]="items"
-            [headerFn]="headerFn"
-            [footerFn]="footerFn"
-            approxItemWidth="80px"
-            approxItemHeight="80px"
-            approxFooterWidth="80px"
-            approxFooterHeight="80px"
-            approxHeaderWidth="100%"
-            approxHeaderHeight="36px">
-
-    <div *virtualHeader="let header" class="virtual-header">
-      Header: {{header.date}}
-    </div>
-
-    <div *virtualItem="let item" class="virtual-item">
-      <ion-img [src]="item.imgSrc"></ion-img>
-      <!--{{ item.index }}-->
-    </div>
-
-    <div *virtualFooter="let footer" class="virtual-footer">
-      footer
-    </div>
-
-  </ion-list>
-
-</ion-content>
-
