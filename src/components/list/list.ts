@@ -122,8 +122,4 @@ export class List extends Ion {
 })
 export class ListHeader {
 
-  constructor(renderer: Renderer, elementRef: ElementRef) {
-
-  }
-
 }
