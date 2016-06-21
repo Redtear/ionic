@@ -18,6 +18,9 @@ import {Platform} from '../platform/platform';
 import {ScrollView} from '../util/scroll-view';
 import {TapClick} from '../components/tap-click/tap-click';
 import {Translate} from '../translation/translate';
+
+import * as hammer from 'hammerjs';
+
 const _reflect: any = Reflect;
 
 
@@ -112,6 +115,7 @@ export function ionicProviders(customProviders?: Array<any>, config?: any): any[
   let featureDetect = new FeatureDetect();
   let navRegistry = new NavRegistry();
 
+  (<any>window)['Hammer'] = hammer;
   setupDom(window, document, config, platform, clickBlock, featureDetect);
   bindEvents(window, document, platform, events);
 

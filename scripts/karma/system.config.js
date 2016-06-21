@@ -3,6 +3,7 @@ System.config({
   map: {
     'ionic-angular': 'src',
     '@angular': 'node_modules/@angular',
+    'hammerjs': 'node_modules/hammerjs/hammer.js'
   },
   packages: {
     'ionic-angular': {

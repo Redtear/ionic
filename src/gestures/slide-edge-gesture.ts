@@ -19,7 +19,7 @@ export class SlideEdgeGesture extends SlideGesture {
     this.maxEdgeStart = opts.maxEdgeStart;
   }
 
-  canStart(ev: any): boolean {
+  canStart(ev: HammerInput): boolean {
     this._d = this.getContainerDimensions();
     return this.edges.every(edge => this._checkEdge(edge, ev.center));
   }

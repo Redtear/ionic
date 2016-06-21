@@ -1,5 +1,6 @@
 import {defaults, assign} from '../util';
-import {Hammer, DIRECTION_HORIZONTAL, DIRECTION_VERTICAL} from './hammer';
+
+import * as hammer from 'hammerjs';
 
 /**
  * @private
@@ -9,7 +10,7 @@ import {Hammer, DIRECTION_HORIZONTAL, DIRECTION_VERTICAL} from './hammer';
  */
 
 export class Gesture {
-  private _hammer: any;
+  private _hammer: HammerManager;
   private _options: any;
   private _callbacks: any = {};
 
@@ -26,8 +27,8 @@ export class Gesture {
     // Map 'x' or 'y' string to hammerjs opts
     this.direction = opts.direction || 'x';
     opts.direction = this.direction === 'x' ?
-      DIRECTION_HORIZONTAL :
-      DIRECTION_VERTICAL;
+      hammer.DIRECTION_HORIZONTAL :
+      hammer.DIRECTION_VERTICAL;
 
     this._options = opts;
   }
@@ -36,7 +37,7 @@ export class Gesture {
     assign(this._options, opts);
   }
 
-  on(type: string, cb: Function) {
+  on(type: string, cb: (event: HammerInput) => any) {
     if (type === 'pinch' || type === 'rotate') {
       this._hammer.get('pinch').set({enable: true});
     }
@@ -44,13 +45,13 @@ export class Gesture {
     (this._callbacks[type] || (this._callbacks[type] = [])).push(cb);
   }
 
-  off(type: string, cb: Function) {
+  off(type: string, cb: (event: HammerInput) => any) {
     this._hammer.off(type, this._callbacks[type] ? cb : null);
   }
 
   listen() {
     if (!this.isListening) {
-      this._hammer = Hammer(this.element, this._options);
+      this._hammer = new Hammer(this.element, this._options);
     }
     this.isListening = true;
   }

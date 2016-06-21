@@ -17,6 +17,7 @@ module.exports = function(config) {
       'node_modules/reflect-metadata/Reflect.js',
       'node_modules/zone.js/dist/zone.js',
       'node_modules/systemjs/dist/system.js',
+      'node_modules/hammerjs/hammer.js',
       'scripts/karma/system.config.js',
       'node_modules/rxjs/bundles/Rx.min.js',
       'dist/bundles/ionic.system.js',

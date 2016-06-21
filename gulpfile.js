@@ -246,7 +246,7 @@ gulp.task('transpile', function(){
 
 function tsCompile(options, cacheName){
   return gulp.src([
-      'typings/main.d.ts',
+      'typings/index.d.ts',
       'src/**/*.ts',
       '!src/**/*.d.ts',
       '!src/components/*/test/**/*',
@@ -373,7 +373,8 @@ gulp.task('copy.libs', function() {
       'node_modules/systemjs/dist/system.src.js',
       'node_modules/rxjs/bundles/Rx.js',
       'node_modules/zone.js/dist/zone.js',
-      'node_modules/reflect-metadata/Reflect.js'
+      'node_modules/reflect-metadata/Reflect.js',
+      'node_modules/hammerjs/hammer.js'
     ])
     .pipe(gulp.dest('dist/js'));
 
@@ -829,6 +830,8 @@ gulp.task('package', function(done){
   var packageJSON = require('./package.json');
   templateVars.ionicVersion = packageJSON.version;
   templateVars.angularVersion = packageJSON.dependencies['@angular/core'];
+  // use hammer 2.0.4 for now since there are typings for it
+  templateVars.hammerVersion = '2.0.4';
   var packageTemplate = _.template(fs.readFileSync('scripts/npm/package.json'));
   fs.writeFileSync(distDir + '/package.json', packageTemplate(templateVars));
   done();
