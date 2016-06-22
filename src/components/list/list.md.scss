@@ -93,8 +93,6 @@ ion-list {
   }
 
   + ion-list {
-    margin-top: $list-md-margin-top + $list-md-margin-bottom;
-
     ion-list-header {
       margin-top: -$list-md-margin-top;
       padding-top: 0;

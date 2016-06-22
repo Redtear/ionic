@@ -97,8 +97,6 @@ ion-list {
 }
 
 ion-list + ion-list {
-  margin-top: $list-ios-margin-top + $list-ios-margin-bottom;
-
   ion-list-header {
     margin-top: -$list-ios-margin-top;
     padding-top: 0;
