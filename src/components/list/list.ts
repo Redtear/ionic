@@ -1,4 +1,4 @@
-import { Directive, ElementRef, EventEmitter, Input, NgZone, Optional, Output } from '@angular/core';
+import { Attribute, Directive, ElementRef, EventEmitter, Input, NgZone, Optional, Output, Renderer } from '@angular/core';
 
 import { Content } from '../content/content';
 import { Ion } from '../ion';
@@ -203,11 +203,17 @@ export class List extends Ion {
  * @private
  */
 @Directive({
-  selector: 'ion-list-header',
-  host: {
-    'class': 'list-header'
-  }
+  selector: 'ion-list-header'
 })
 export class ListHeader {
+  constructor(private _renderer: Renderer, private _elementRef: ElementRef, @Attribute('id') private _id: string) { }
 
+  public get id(): string {
+    return this._id;
+  }
+
+  public set id(val: string) {
+    this._id = val;
+    this._renderer.setElementAttribute(this._elementRef.nativeElement, 'id', val);
+  }
 }
